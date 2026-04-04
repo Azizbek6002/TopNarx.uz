@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   TopNarx — Art Deco Noir
+   Palette: Coal · Old Gold · Ivory · Deep Emerald
+════════════════════════════════════════════════ */
+
+:root {
+  --brand-gold:    #c9a84c;
+  --brand-emerald: #2d6a4f;
+  --brand-coal:    #0e0e0e;
+  --brand-ivory:   #f5f0e8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--brand-coal);
+  color: var(--brand-ivory);
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: #f5f0e8;
+}
+
+/* Scrollbar — refined dark */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #161616; }
+::-webkit-scrollbar-thumb  { background: #3d3d3d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-gold); }
