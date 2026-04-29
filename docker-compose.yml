@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: topnarx
+      POSTGRES_USER: topnarx
+      POSTGRES_PASSWORD: topnarx_pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - appnet
+
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DEBUG: "False"
+      SECRET_KEY: "super-secret-key"
+      DB_NAME: topnarx
+      DB_USER: topnarx
+      DB_PASSWORD: topnarx_pass
+      DB_HOST: db
+      DB_PORT: "5432"
+      ALLOWED_HOSTS: "*"
+    ports:
+      - "8000:8000"
+    networks:
+      - appnet
+    restart: always
+
+volumes:
+  pgdata:
+
+networks:
+  appnet:
+    driver: bridge
