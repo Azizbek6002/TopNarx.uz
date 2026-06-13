@@ -114,16 +114,16 @@ class VariantSearchView(ListAPIView):
                 Q(label__icontains=q)
             )
 
-        # PostgreSQL uchun:
-        # har bir item_id dan faqat bittadan qaytaradi
-        qs = qs.order_by(
-            "item_id",
-            "item__name",
-            "size_value",
-            "label",
-        ).distinct("item_id")
+        # Get the first variant ID for each unique item_id.
+        # This standard ORM approach is database-independent and works on both SQLite and PostgreSQL.
+        from django.db.models import Min
+        first_variant_ids = qs.values("item_id").annotate(min_id=Min("id")).values_list("min_id", flat=True)
 
-        return qs[:20]
+        return MenuItemVariant.objects.select_related(
+            "item", "item__category"
+        ).filter(
+            id__in=first_variant_ids
+        ).order_by("item__name", "size_value", "label")[:20]
 
 
 class MenuCategoryViewSet(viewsets.ReadOnlyModelViewSet):

@@ -17,12 +17,13 @@ class MenuCategory(BaseModel):
 class MenuItem(BaseModel):
     UNIT_CHOICES = (
         ("ml", "ml"),
+        ("dona", "dona"),
         ("g", "g"),
         ("pcs", "pcs"),
     )
 
     name = models.CharField(max_length=120)
-    normalized_name = models.CharField(max_length=140, db_index=True)
+    normalized_name = models.CharField(max_length=140, db_index=True, blank=True)
     category = models.ForeignKey(MenuCategory, on_delete=models.PROTECT, related_name="items")
     default_unit = models.CharField(max_length=10, choices=UNIT_CHOICES, default="pcs")
     is_active = models.BooleanField(default=True)
@@ -33,6 +34,10 @@ class MenuItem(BaseModel):
             models.Index(fields=["normalized_name"]),
             models.Index(fields=["is_active"]),
         ]
+
+    def save(self, *args, **kwargs):
+        self.normalized_name = self.name.strip().lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

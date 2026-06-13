@@ -1,13 +1,7 @@
-from .models import MenuItemPrice, PriceSubmission
-from .models import FavoriteVariant
 from rest_framework import serializers
-
-
-
-from rest_framework import serializers
-from .models import MenuItemPrice
 from menu.models import MenuItemVariant
 from places.models import Restaurant
+from .models import MenuItemPrice, PriceSubmission, FavoriteVariant
 
 
 class ComparePriceSerializer(serializers.ModelSerializer):
@@ -16,6 +10,8 @@ class ComparePriceSerializer(serializers.ModelSerializer):
     variant_label = serializers.CharField(source="variant.label")
     distance_km = serializers.FloatField(read_only=True)
     variant_uuid = serializers.UUIDField(source="variant.id", read_only=True)
+    size_value = serializers.IntegerField(source="variant.size_value", read_only=True)
+    size_unit = serializers.CharField(source="variant.size_unit", read_only=True)
 
     score = serializers.FloatField(read_only=True)
 
@@ -26,6 +22,8 @@ class ComparePriceSerializer(serializers.ModelSerializer):
             "restaurant_name",
             "item_name",
             "variant_label",
+            "size_value",
+            "size_unit",
             "price_amount",
             "distance_km",
             "is_verified",

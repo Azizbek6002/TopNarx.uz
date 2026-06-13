@@ -1,0 +1,45 @@
+services:
+  # =========================
+  # Django Backend (Supabase ishlatiladi)
+  # =========================
+  - type: web
+    name: topnarx-backend
+    runtime: docker
+
+    repo: https://github.com/Azizbek6002/TopNarx.uz.git
+    branch: main
+
+    plan: free
+
+    dockerfilePath: ./Dockerfile
+
+    # ✅ Health check endpoint
+    healthCheckPath: /health/
+
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+
+      - key: SECRET_KEY
+        generateValue: true
+
+      - key: DEBUG
+        value: "false"
+
+      # ⚠️ Supabase database connection (Render pserv o'rniga)
+      - key: DATABASE_URL
+        value: postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:5432/postgres
+
+      - key: ALLOWED_HOSTS
+        value: topnarx-backend.onrender.com,topnarx.uz,www.topnarx.uz
+
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://topnarx.uz,https://www.topnarx.uz,https://topnarx.vercel.app
+
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://topnarx.uz,https://www.topnarx.uz,https://topnarx.vercel.app,https://topnarx-backend.onrender.com
+
+      - key: PYTHON_VERSION
+        value: 3.12.0
+
+# ⚠️ Render pserv o'rniga Supabase ishlatamiz, shuning uchun database section o'chiriladi
